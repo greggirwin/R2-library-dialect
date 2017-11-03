@@ -2,8 +2,8 @@
 
 Old Rebol 2 Library Interface Dialect
 
-author: Gregg Irwin
-date:   6-Nov-2004
+- author: Gregg Irwin
+- date:   6-Nov-2004
     
 # Overview
 
