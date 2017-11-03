@@ -1,38 +1,23 @@
 REBOL [
-    Title:  "Library Interface Dialect"
-    File:   %lib-dialect.r
-    Author: "Gregg Irwin"
-    Purpose: {
-        Allow for a more concise way to define library routine 
-        interfaces.
-    }
+    Title:   "Library Interface Dialect"
+    File:    %lib-dialect.r
+    Author:  "Gregg Irwin"
+    Purpose: "Allow for a more concise way to define library routine interfaces."
 ]
 
 lib-dialect-ctx: context [
-;     lib-ctx: make object! [file: lib: none free: does [free lib]]
-;     lib-spec: none
-
     lib: none
     def-rtn-type: none
 
     name-mods: copy []
     mod-name: func [name] [do join name-mods name]
 
-    ; dump/trace option to show generated code?
-
-    ;has-rtn-type?: does [all [rtn-type  'none <> rtn-type]]
     ; lib is a global word reference in this func.
     make-dll-func: func [reb-name spec rtn-type name] [
         spec: copy any [spec []]
         if all [rtn-type  'none <> rtn-type] [
             append spec compose/deep [return: [(rtn-type)]]
         ]
-        ;print ['make-dll-func reb-name mold spec rtn-type mold  mod-name any [name  form reb-name]]
-        ;print [
-        ;    mold to set-word! reb-name "make routine!" 
-        ;    mold new-line/skip spec on 2 
-        ;    mold lib  mold mod-name any [name  form reb-name]
-        ;]
         set reb-name make routine! spec lib  mod-name any [name  form reb-name]
     ]
 
@@ -43,11 +28,11 @@ lib-dialect-ctx: context [
 
     func-decl: [
         (spec: name: none  rtn-type: def-rtn-type)
-        set reb-name word!          ;(print reb-name)
+        set reb-name word!
         any [
-              [set spec block!]     ;(print mold spec)
-            | [opt ['returns | 'as] set rtn-type data-type]  ;(print rtn-type)
-            | [opt 'calls set name string!]    ;(print name)
+              [set spec block!]
+            | [opt ['returns | 'as] set rtn-type data-type]
+            | [opt 'calls set name string!]
         ]
         (make-dll-func reb-name spec rtn-type name)
     ]
@@ -60,7 +45,7 @@ lib-dialect-ctx: context [
     ]
 
     rules: [
-        ['lib | 'library] set file file! (lib: load/library file) ;append lib-spec compose [file: (file)]
+        ['lib | 'library] set file file! (lib: load/library file)
         opt [
             ['modify-import-names | 'mod-imports] set name-mods block!
         ]
@@ -71,12 +56,5 @@ lib-dialect-ctx: context [
         clear name-mods
         parse spec rules
     ]
-
-;     set 'make-library-interface func [spec] [
-;         lib-spec: copy []
-;         clear name-mods
-;         parse spec rules
-;     ]
-
 ]
 
